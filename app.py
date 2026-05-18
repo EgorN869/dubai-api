@@ -14,7 +14,7 @@ def get_db():
 
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "DubaiElite API"}
+    return {"status": "ok"}
 
 @app.get("/api/health")
 def health():
@@ -24,7 +24,19 @@ def health():
 def properties():
     conn = get_db()
     rows = conn.execute("SELECT * FROM realty_objects WHERE status='ACTIVE' LIMIT 20").fetchall()
-    data = [dict(r) for r in rows]
+    data = []
+    for r in rows:
+        d = dict(r)
+        # Конвертируем photos в массив
+        photos_raw = d.get("photos", "[]")
+        if isinstance(photos_raw, str):
+            try:
+                d["photos"] = json.loads(photos_raw)
+            except:
+                d["photos"] = [photos_raw] if photos_raw else []
+        if not isinstance(d.get("photos"), list):
+            d["photos"] = []
+        data.append(d)
     conn.close()
     return {"success": True, "data": data}
 
