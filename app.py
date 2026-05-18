@@ -49,6 +49,18 @@ def translations(lang: str = "en"):
     }
     return {"success": True, "data": t.get(lang, t["en"])}
 
+@app.get("/api/create")
+def create_listing(user_id: int):
+    # Отправляем /create в бота через Telegram API
+    import urllib.request
+    BOT_TOKEN = "8086325450:AAFH2LvVGZg32bqKxQhWYgJ0IS5rvMXUHks"
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text=/create"
+    try:
+        urllib.request.urlopen(url)
+    except:
+        pass
+    return {"success": True}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
