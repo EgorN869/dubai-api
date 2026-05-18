@@ -55,10 +55,12 @@ def create_listing(user_id: int):
     import urllib.request
     BOT_TOKEN = "8086325450:AAFH2LvVGZg32bqKxQhWYgJ0IS5rvMXUHks"
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text=/create"
+    print(f"[CREATE] Sending to {user_id}")
     try:
-        urllib.request.urlopen(url)
-    except:
-        pass
+        resp = urllib.request.urlopen(url)
+        print(f"[CREATE] Response: {resp.read().decode()}")
+    except Exception as e:
+        print(f"[CREATE] Error: {e}")
     return {"success": True}
 
 if __name__ == "__main__":
